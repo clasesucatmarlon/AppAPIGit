@@ -5,7 +5,7 @@
 }
 
 body {
-  padding: 4rem;
+  padding: 1rem;
   font-size: 1.5rem;
 }
 
@@ -15,3 +15,39 @@ input {
   padding: 5px;
   color: green;
 }
+
+.card-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  align-content: center;
+  border: 1px solid grey;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  margin-right: 2rem;
+  overflow: hidden;
+  background: chocolate;
+  justify-content: center;
+  text-align: center;
+  width: 20rem;
+  box-shadow: 5px 5px 5px grey;
+}
+
+.card p {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.card img {
+  margin-top: 1rem;
+  height: 15rem;
+  width: 15rem;
+  text-align: center;
+  border-radius: 15px;
+}
+
+

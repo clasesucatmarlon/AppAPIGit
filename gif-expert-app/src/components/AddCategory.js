@@ -13,7 +13,7 @@ export const AddCategory = ({setCateg}) => {
    const handleSubmit = (e) => {
       e.preventDefault();  // Prevenir el comportamiento por defecto del formulario
       if (inputValue.trim().length > 2) {
-         setCateg( cat => [...cat, inputValue] );
+         setCateg( cat => [inputValue, ...cat, ] );
          setinputValue('');
       }
    }

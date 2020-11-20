@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { GifGridItems } from './GifGridItems';
 
 export const GifGrid = ({ category }) => {
 
+   const [images, setImages] = useState([])
+
+   // Ejecutar la petición Fetch solo una vez
+   useEffect(() => {
+      getGifs();
+   }, [])
+
    const getGifs = async () => {
-      const url = 'https://api.giphy.com/v1/gifs/search?q=monkey&limit=5&api_key=pOFtYHGzH718DYtBKguubBLqSqEdL6IS';
+      const url = `https://api.giphy.com/v1/gifs/search?q=${encodeURI( category )}&limit=10&api_key=pOFtYHGzH718DYtBKguubBLqSqEdL6IS`;
       const resp = await fetch(url);
       const { data } = await resp.json();
 
@@ -16,11 +24,26 @@ export const GifGrid = ({ category }) => {
       })
 
       console.log(gifs);
+      setImages(gifs)
    }
-   getGifs();
+   /* getGifs(); */
+
    return (
-      <div>
+      <>
          <h3>{category}</h3>
-      </div>
+         <div className='card-grid'>
+         
+               {
+                  images.map(imag => (
+                     <GifGridItems
+                        key={imag.id}
+                        {...imag}
+                     />
+                  ))
+               }
+         
+
+         </div>
+      </>
    )
 }
