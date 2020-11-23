@@ -4,10 +4,10 @@
     sans-serif;
 }
 
-body {
+/* body {
   padding: 1rem;
   font-size: 1.5rem;
-}
+} */
 
 input {
   width: 100%;
@@ -15,6 +15,21 @@ input {
   padding: 5px;
   color: green;
 }
+
+.title {
+  border-radius: 15px;
+  margin: 1.5rem;
+  width: 95%;
+  background: blue;
+}
+
+.title h3 {
+  text-align: center;
+  color: white;
+  font-size: 3rem;
+  padding: 1rem;
+}
+
 
 .card-grid {
   display: flex;
@@ -33,13 +48,15 @@ input {
   background: chocolate;
   justify-content: center;
   text-align: center;
-  width: 20rem;
+  width: 22rem;
   box-shadow: 5px 5px 5px grey;
 }
 
 .card p {
   padding: 0.5rem;
   text-align: center;
+  color: white;
+  font-size: 1.5rem;
 }
 
 .card img {
