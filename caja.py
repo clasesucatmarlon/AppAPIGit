@@ -1,186 +1,115 @@
-#-*- coding: utf-8-*-
-import sys
+import unittest  # Módulo para realizar las pruebas
+import random # Para usar la funcion aleatoria
 
-articulos={}
-fulltotal=0
-def ingreso_productos():
-    caja=True
-    while caja==True:
-        opcion =input("Va a ingresar un artículo SI/NO: ")
-        try:
-            if opcion.isalpha()==True:
-                if opcion.lower()=="si":
-                    producto=input("ingrese el articulo: ")
-                    precio=int(input("ingrese el precio: "))
-                    articulos[producto]=precio
-                elif opcion.lower()=="no":
-                    caja=False
-                else:
-                    print("información no reconocida")
-            else:
-                print("no se reconocen datos numericos")
-        except:
-            caja=True
-    print("sus articulos existentes son: ")
-    for clave in articulos:
-        print(clave,":",articulos[clave])
+class RegisterCash:
+    """  Clase para caja registradora
+    """
+    productPrice = [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]    
+
+    product = []
+    productCode = []
+    priceSubtotal =[]
 
 
-#  Cliente*************
-#  ********************************************
-def compras():
-	if len(articulos)>0:
-	    caja_2=True
-	    total=0
-	    while caja_2==True:
-	        for clave in articulos:
-	        	print(clave,":",articulos[clave])
-	        producto=input("Qué artículos va a llevar: ")
-	        for elemento in articulos:
-	            if elemento==producto:
-	                print("usted eligió %s"%(elemento))
-	                cantidad=input("qué cantidad desea llevar del producto: ")
-	                cantida=cantidad*articulos[elemento]
-	                total=total+cantida
-	                
-	                print("articulo %s: cantidad %s: subtotal de factura Q.%s "%(elemento, cantidad,total ))
-	                volver=True
-	                while volver==True:
-	                    seguir=input("quiere elegir otro articulo SI/NO: ")
-	                    if seguir.lower()=="si":
-	                        caja_2=True
-	                        volver=False
-	                    elif seguir.lower()=="no":
-	                        caja_2=False
-	                        volver=False
-	                        return total
-	                    else:
-	                        print("opcion invalida")
-	                        volver=True
-	else:
-		print("No hay productos en existencia")
+    def productInput(self, product, code):
+        """ Método para capturar y guardar productos y códigos
+        """
+        self.product.append(product)
+        self.productCode.append(code)
+        subtotal = self.subtotalCalc()
+        return self.product, self.productCode, subtotal 
 
 
-#  Factura*****************
-#  ***************************************************
-def factura():
-    caja_2=True
-    while caja_2==True:
-        print("1.Master")
-        print("2.Visa")
-        print("3.Ninguna")
-        tarjeta=input("Elija el tipo de tarjeta?: ")
-        try:
-            if tarjeta.isalpha()==False:
-                # INGRESO PRODUCTO 
-                #*******************************************************
-                if tarjeta=="1":
-			        print("Master")
-					print("Tiene un descuento del 5%:")
-					print("El subtotal de la factura esQ.%s"%(fulltotal))
-					IVA = (fulltotal*0.12)
-					descuento = (fulltotal*0.05)
-					totaltotal = fulltotal + IVA - descuento
-					#  comienza facturación
-					print("Debe: %s"%(fulltotal))
-					print("______________________")
-					nombre_del_cliente = input("Nombre Del Cliente: ")
-					nit = input("NIT: ")
-					efectivo = input("Efectivo :  ")
-					cambio = efectivo - fulltotal
-					print("__________________________")
-					print(("Precio       %.2f\t") % fulltotal)
-					print( ("IVA          %.2f\t") % IVA)
-					print(("Total        %.2f\t") % totaltotal)
-					print(("Efectivo     %.2f\t") % efectivo)
-					print("__________________________")
-					print("cambio:   %s"%(cambio))
-					break
-                # COMPRA
-                #*******************************************************************
-                elif tarjeta=="2":
-                    print("Visa")
-                    print("Tiene un descuento del 2%:")
-                    print("El subtotal de la factura esQ.%s"%(fulltotal))
-                    IVA = (fulltotal*0.12)
-                    descuento = (fulltotal*0.02)
-                    totaltotal = fulltotal + IVA - descuento
-                    #  comienza facturación
-                    print("Debe: ",totaltotal)
-                    print("______________________")
-                    nombre_del_cliente = input("Nombre Del Cliente: ")
-                    nit = input("NIT: ")
-                    efectivo = input("Efectivo :  ")
-                    cambio = efectivo - totaltotal
-                    print("__________________________")
-                    print(("Precio       %.2f\t") % fulltotal)
-                    print(("IVA          %.2f\t") % IVA)
-                    print(("Total        %.2f\t") % totaltotal)
-                    print(("Efectivo     %.2f\t") % efectivo)
-                    print("__________________________")
-                    print(("cambio:   "),cambio)
-                    caja_2=False
-                elif tarjeta =="3":
-                    IVA = (fulltotal*0.12)
-                    totaltotal = fulltotal + IVA 
-                    #  comienza facturación
-                    print("Debe: ",totaltotal)
-                    print("______________________")
-                    nombre_del_cliente = input("Nombre Del Cliente: ")
-                    nit = input("NIT: ")
-                    efectivo = input("Efectivo :  ")
-                    cambio = efectivo - totaltotal
-                    print("__________________________")
-                    print(("Precio       %.2f\t") % fulltotal)
-                    print(("IVA          %.2f\t") % IVA)
-                    print(("Total        %.2f\t") % totaltotal)
-                    print(("Efectivo     %.2f\t") % efectivo)
-                    print("__________________________")
-                    print(("cambio:   "),cambio)
-                    caja_2=False
-                else:
-                    print("opcion no valida")
-            else:
-                print("Debe ingresar cantidades no se permiten letras ni caracteres especiales")
-        except:
-            opcion3=True
-	print("Gracias por su compra, hasta la próxima")
+    def subtotalCalc(self):    
+        """ Método para calcular el subtotal
+        """
+        countProduct = len(self.product)
+        countSubtotal = len(self.priceSubtotal)
+        if countProduct > countSubtotal:
+            code_product = self.productCode[-1] 
+            subtotal =  self.productPrice[(code_product -1)]          
+            self.priceSubtotal.append(subtotal)
+        else: subtotal = self.priceSubtotal[-1]                                                    
+        return subtotal
 
 
-#  Menu************************
-#  ***********************************************
-salir=False
-while salir==False:
-    print("Caja Registradora")
-    print("¿Qué desea realizar?")
-    print("1. Ingreso productos")
-    print("2. Compras")
-    print("3. Factura")
-    opmenu = input("ingrese opción: ")
-    try:
-	    if opmenu.isalpha()==False:
-		    if opmenu =="1":
-		        ingreso_productos()
-		        opcionmenu=input("Desea volver al menu SI/NO: ")
-		        if opcionmenu.lower()=="si":
-		        	salir=False
-		        else:
-		            break
-		    elif opmenu =="2":
+    def calcTotal(self):
+        """ Método para el calculo de la compra total
+        """
+        discList = []
+        disc = 0
+        r = 0
+        total = sum(self.priceSubtotal)
+        for i in range(len(self.product)):
+            n = random.randint (0, 3)
+            discList.append(n*10)                  
+            r = ((n*10)*self.productPrice[i])/100   
+            disc = disc + r
+        self.print_ticket(total, disc, discList)
+        return total, disc, discList               
 
-		        fulltotal= compras()
-		        print(fulltotal)
-		        opcionmenu=input("Desea volver al menu SI/NO: ")
-		        if opcionmenu.lower()=="si":
-		            salir=False
-		        else:
-		            break
-		    elif opmenu =="3":
-		        print(factura())
-		        opcionmenu=input("Desea vover al menu SI/NO: ")
-		        if opcionmenu.lower()=="si":
-		            salir=False
-		        else:
-		            break
-    except:
-		print("Adios")
+
+    def print_ticket(self,total,disc,discList):
+        """ Método para imprimir
+        """
+        print('\n{:^10}{:^10}{:^10}{:^10}'.format("products","code","price","discount"))
+        print("-" * 42)
+        n = len(self.product)
+        for i in range(n):
+            print('{:^10}{:^10}{:^10}{:^10}'.format(self.product[i],self.productCode[i],'$ '+ str(self.productPrice[i]),'-' + str(discList[i])+'%'))
+
+        print("-" * 42)
+        print("Subtotal: {:>27}".format('$'+ str(total)))
+        print("Total discount: {:>23}".format('$'+ str(disc)))
+        print("Total to charge:{:>23}".format("$"+ str(total - disc)))
+        return True   
+
+
+# TEST
+class CashRegisterTest(unittest.TestCase):
+    """ Test caja registradora
+    """
+    def setUp(self):
+        """ Carga inicial
+        """
+        self.cRegistrer = RegisterCash()
+        self.nProduct = 0
+        self.lCode = [1,2,3,4,5,6,7,8,9,10]
+
+    def testFirst(self):
+        """ Primer test
+        """
+        reps = 5
+
+        while True:
+            self.nProduct += 1
+            self.nameProduct = 'Product ' + str(self.nProduct) 
+            numlCode = self.nProduct - 1
+            product, code, subtotal= self.cRegistrer.productInput(self.nameProduct,self.lCode[numlCode])
+            if self.nProduct >= reps:
+                break
+        self.assertTrue(product, self.nameProduct)
+        self.assertTrue(code, numlCode)
+        self.assertEqual(self.nProduct, reps)
+
+
+    def testSecond(self):
+        """ Segundo test
+        """
+        subtotal = self.cRegistrer.subtotalCalc()  
+        lastCode = self.cRegistrer.productCode[-1]     
+        self.assertEqual(subtotal, self.cRegistrer.productPrice[lastCode - 1])
+
+
+    def testThirt(self):
+        """ Tercer test
+        """
+        total, disc, discList = self.cRegistrer.calcTotal()
+        self.assertEqual(total,sum(self.cRegistrer.priceSubtotal))
+        countProduct = len(self.cRegistrer.product)
+        self.assertEqual(len(discList),countProduct)
+        self.assertLess(disc, total)
+
+
+if __name__ == '__main__':
+    unittest.main() 
